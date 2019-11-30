@@ -1,0 +1,70 @@
+{% load static %}<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block title %}Job API{% endblock %}</title>
+    {% if user.is_authenticated and user.is_user_administrator %}
+      <link rel="stylesheet" type="text/css" href="{% static 'useradmin.css' %}">
+    {% elif user.is_authenticated and user.is_user_normal %}
+      <link rel="stylesheet" type="text/css" href="{% static 'user.css' %}">
+    {% elif user.is_authenticated and user.is_admin_user %}
+      <link rel="stylesheet" type="text/css" href="{% static 'admin.css' %}">
+    {% endif %}
+  </head>
+  <body>
+    <div class="container my-4">
+      <div class="row justify-content-center">
+        <div class="col-md-10 col-sm-12">
+          <div class="row">
+            <div class="col-6">
+              <h1 class="logo">
+                <a href="{% url 'home' %}">
+                  Job API
+                  {% if user.is_authenticated %}
+                    {% if user.is_user_administrator %}
+                      <span class="icon-feather" data-toggle="tooltip" data-placement="right" title="Teacher profile"></span>
+                    {% else %}
+                      <span class="icon-graduation-cap" data-toggle="tooltip" data-placement="right" title="Student profile"></span>
+                    {% endif %}
+                  {% endif %}
+                </a>
+              </h1>
+            </div>
+            <div class="col-6 text-right">
+              {% if user.is_authenticated %}
+                <p class="pt-3">Logged in as <strong>{{ user.username }}</strong>.
+                      {% if user.is_authenticated and user.is_user_administrator %}
+                        User Administrator.
+                      {% elif user.is_authenticated and user.is_user_normal %}
+                        User
+                      {% elif user.is_authenticated and user.is_admin_user %}
+                        Administrator.
+                      {% endif %}
+
+                  <a href="{% url 'logout' %}">Log out</a>.</p>
+              {% else %}
+                <a href="{% url 'login' %}" class="btn btn-light" role="button">Log in</a>
+                <a href="{% url 'signup_form' %}" class="btn btn-primary" role="button">Sign up</a>
+              {% endif %}
+            </div>
+          </div>
+          <div class="card mb-3">
+            <div class="card-body">
+              {% for message in messages %}
+                <div class="alert {{ message.tags }} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              {% endfor %}
+              {% block content %}
+              {% endblock %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

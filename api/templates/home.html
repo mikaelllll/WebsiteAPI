@@ -1,0 +1,10 @@
+{% load static %}
+<head>
+    {% if user.is_authenticated and user.is_admin_user %}
+      <link rel="stylesheet" type="text/css" href="{% static 'admin.css' %}">
+    {% elif user.is_authenticated and user.is_user_administrator %}
+      <link rel="stylesheet" type="text/css" href="{% static 'useradmin.css' %}">
+    {% elif user.is_authenticated and user.is_user_normal %}
+      <link rel="stylesheet" type="text/css" href="{% static 'user.css' %}">
+    {% endif %}
+</head>
