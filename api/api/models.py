@@ -63,5 +63,3 @@ class User(AbstractUser):
         null = False,
         blank = False
     )
-
-    objects = models.Manager()
