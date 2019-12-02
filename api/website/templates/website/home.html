@@ -4,32 +4,5 @@
 
 {% block content %}
 
-{% if user.is_authenticated and user.is_admin_user %}
-<form action="{% url 'useradmin_signup_form' %}" method="get">
-    <input type="submit" value="Register user administrator" />
-</form>
-
-<table>
-<tbody>
-{% for admin_user in allusers %}
-<tr>
-    {% if admin_user.is_user_administrator and admin_user.is_active %}
-        <td>Username: {{ admin_user.username }}, </td>
-        <td>Last Login: {{ admin_user.last_login }}</td>
-    {% endif %}
-</tr>
-{% endfor %}
-</tbody>
-</table>
-
-{% endif %}
-
-{% if user.is_authenticated and user.is_user_administrator %}
-<form action="{% url 'useradmin_signup_form' %}" method="get">
-    <input type="submit" value="Register user administrator" />
-</form>
-
-{% endif %}
-
 
 {% endblock %}
