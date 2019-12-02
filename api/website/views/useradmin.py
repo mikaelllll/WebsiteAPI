@@ -25,3 +25,8 @@ class AdminUserSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         return redirect('home')
+
+class ListAllUser(ListView):
+    template_name = 'website/home.html'
+    model = User
+    context_object_name = "allusers"

@@ -59,6 +59,11 @@ class SignUpForm(UserCreationForm):
 class AdminUserSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
+        fields = [
+            'first_name',
+            'username'
+        ]
+
 
     @transaction.atomic
     def save(self):
