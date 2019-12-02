@@ -4,8 +4,6 @@ from django.db import transaction
 from django.forms.utils import ValidationError
 from api.models import User
 
-from api.models import User
-
 class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
@@ -57,3 +55,14 @@ class SignUpForm(UserCreationForm):
         self.fields['email'].label = "Email*"
         self.fields['telephone'].label = "Telephone"
         self.fields['cpf'].label = "CPF"
+
+class AdminUserSignUpForm(UserCreationForm):
+    class Meta(UserCreationForm.Meta):
+        model = User
+
+    @transaction.atomic
+    def save(self):
+        user = super().save(commit=False)
+        user.is_user_administrator = True
+        user.save()
+        return user

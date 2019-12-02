@@ -5,7 +5,9 @@
 {% block content %}
 
 {% if user.is_authenticated and user.is_admin_user %}
-a
+<form action="{% url 'useradmin_signup_form' %}" method="get">
+    <input type="submit" value="Register user administrator" />
+</form>
 {% endif %}
 
 {% endblock %}
