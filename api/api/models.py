@@ -1,4 +1,5 @@
 from django.contrib.auth.models import AbstractUser
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import FileExtensionValidator
 
@@ -61,9 +62,9 @@ class User(AbstractUser):
 class JobVacancy(models.Model):
 
     userADMID = models.ForeignKey(
-        User,
+        get_user_model(),
         on_delete=models.CASCADE,
-        null = False,
+        null = True,
         blank = False
     )
 
@@ -86,7 +87,6 @@ class JobVacancy(models.Model):
     )
 
     createDate = models.DateTimeField(
-        auto_now=False,
         auto_now_add=True,
         null=False,
         blank=False
@@ -100,6 +100,7 @@ class JobVacancy(models.Model):
     )
 
     isDeleted = models.BooleanField(
+        default=False,
         null=False,
         blank=False
     )

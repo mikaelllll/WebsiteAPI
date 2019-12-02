@@ -25,4 +25,7 @@ urlpatterns = [
     path('accounts/signup_form/', views.UserSignUpView.as_view(), name='signup_form'),
     path('accounts/useradmin_signup_form/', views.AdminUserSignUpView.as_view(), name='useradmin_signup_form'),
     path('admin_home/', views.ListAllAdminUser.as_view(), name='admin_home'),
+    path('user_admin_home/',views.ListAllJobVacancy.as_view(), name='user_admin_home'),
+    path('registration/jobvacancy', views.JobVacancySignUpView.as_view(), name='register_job_vacancy'),
+
 ]

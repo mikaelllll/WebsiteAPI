@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% if user.is_authenticated and user.is_user_administrator %}
+<form action="{% url 'register_job_vacancy' %}" method="get">
+    <input type="submit" value="Register job vacancy" />
+</form>
+
+<table>
+<tbody>
+{% for job_vacancy in all_job_vacancy %}
+<tr>
+    {% if not job_vacancy.isDeleted and job_vacancy.userADMID_id == user.id %}
+        <td>Company: {{ job_vacancy.company }}, </td>
+        <td>Description: {{ job_vacancy.description }}, </td>
+        <td>Salary: {{ job_vacancy.salary }}</td>
+    {% endif %}
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+{% endif %}
+
+{% endblock %}

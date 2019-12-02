@@ -9,13 +9,15 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 
 from .decorators import user_required
-from .forms import SignUpForm, AdminUserSignUpForm
-from api.models import User
+from .forms import SignUpForm, AdminUserSignUpForm, JobVacancySignUpForm
+from api.models import User, JobVacancy
 
 def home(request):
     if request.user.is_authenticated:
         if request.user.is_admin_user:
             return redirect('admin_home')
+        elif request.user.is_user_administrator:
+            return redirect('user_admin_home')
     return render(request, 'website/home.html')
 
 class UserSignUpView(CreateView):
@@ -49,3 +51,24 @@ class ListAllAdminUser(ListView):
     template_name = 'website/admin_home.html'
     model = User
     context_object_name = "all_admin_users"
+
+class JobVacancySignUpView(CreateView):
+    model = JobVacancy
+    form_class = JobVacancySignUpForm
+    template_name = 'website/register_job_vacancy.html'
+    success_url = reverse_lazy("user_admin_home")
+
+    def post(self, request):
+        form = JobVacancySignUpForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.userADMID_id = request.user.id
+            instance.save()
+        return render(request, 'website/user_admin_home.html', {'form':form})
+
+
+class ListAllJobVacancy(ListView):
+    template_name = 'website/user_admin_home.html'
+    model = JobVacancy
+    context_object_name = "all_job_vacancy"
+
