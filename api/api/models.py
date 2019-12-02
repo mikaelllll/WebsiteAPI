@@ -58,8 +58,50 @@ class User(AbstractUser):
         blank=True
     )
 
-    isDeleted = models.BooleanField(
-        default = False,
+class JobVacancy(models.Model):
+
+    userADMID = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
         null = False,
         blank = False
     )
+
+    company = models.CharField(
+        max_length=255,
+        null=True,
+        blank=True
+    )
+
+    description = models.CharField(
+        max_length=4000,
+        null=False,
+        blank=False
+    )
+
+    salary = models.CharField(
+        max_length=100,
+        null=False,
+        blank=False
+    )
+
+    createDate = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=True,
+        null=False,
+        blank=False
+    )
+
+    deleteDate = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+
+    isDeleted = models.BooleanField(
+        null=False,
+        blank=False
+    )
+
+    objects = models.Manager()
