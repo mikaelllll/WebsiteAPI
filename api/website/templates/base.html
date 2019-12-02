@@ -21,13 +21,6 @@
               <h1 class="logo">
                 <a href="{% url 'home' %}">
                   Job API
-                  {% if user.is_authenticated %}
-                    {% if user.is_user_administrator %}
-                      <span class="icon-feather" data-toggle="tooltip" data-placement="right" title="Teacher profile"></span>
-                    {% else %}
-                      <span class="icon-graduation-cap" data-toggle="tooltip" data-placement="right" title="Student profile"></span>
-                    {% endif %}
-                  {% endif %}
                 </a>
               </h1>
             </div>
@@ -41,7 +34,6 @@
                       {% elif user.is_authenticated and user.is_admin_user %}
                         Administrator.
                       {% endif %}
-
                   <a href="{% url 'logout' %}">Log out</a>.</p>
               {% else %}
                 <a href="{% url 'login' %}" class="btn btn-light" role="button">Log in</a>
