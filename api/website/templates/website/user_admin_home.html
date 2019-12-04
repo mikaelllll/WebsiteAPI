@@ -4,6 +4,8 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'admin_home.css' %}">
 
+{% if user.is_authenticated and user.is_user_administrator %}
+
 <table class="blueTable">
 <thead>
 <tr>
@@ -19,6 +21,12 @@
         <td>{{ job_vacancy.company }} </td>
         <td>{{ job_vacancy.description }} </td>
         <td>{{ job_vacancy.salary }}</td>
+        <td><form method="post" action="{% url 'comment' job_vacancy.id %}" novalidate>
+            {% csrf_token %}
+            <input type='hidden' value='{{job_vacancy.id}}' name='id'>
+            {{ form }}
+            <input type="submit" name="commentID" value="Comments" id = {{job_vacancy.id}}/>
+        </form></td>
     {% endif %}
 </tr>
 {% endfor %}
@@ -26,7 +34,6 @@
 </tbody>
 </table>
 
-{% if user.is_authenticated and user.is_user_administrator %}
 <form action="{% url 'register_job_vacancy' %}" method="get">
     <input type="submit" value="Register job vacancy" />
 </form>

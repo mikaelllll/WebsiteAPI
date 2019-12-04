@@ -12,8 +12,8 @@ from django import template
 register = template.Library()
 
 from .decorators import user_required
-from .forms import SignUpForm, AdminUserSignUpForm, JobVacancySignUpForm, JobApplicationRegisterForm, UserChangeForm
-from api.models import User, JobVacancy, JobApplication
+from .forms import SignUpForm, AdminUserSignUpForm, JobVacancySignUpForm, JobApplicationRegisterForm, UserChangeForm, CommentSignUpForm
+from api.models import User, JobVacancy, JobApplication, Comment
 
 def home(request):
     if request.user.is_authenticated:
@@ -27,6 +27,18 @@ def home(request):
 
 def profile(request):
     return render(request, 'website/profile.html')
+
+def comment(request, id):
+    selected_company = JobVacancy.objects.filter(id = id).first()
+    user_list = JobApplication.objects.filter(jobVacancyID_id = selected_company).all()
+    all_user = User.objects.all()
+    all_coments = Comment.objects.all()
+    context = {'application_list':user_list, 'all_users':all_user, 'all_comment':all_coments}
+    return render(request, 'website/comment.html', context)
+
+def create_comment(request, companyid, userid):
+    context = {'id': companyid, 'user':userid}
+    return render(request, 'website/create_comment.html', context)
 
 class UserSignUpView(CreateView):
     model = User
@@ -80,6 +92,11 @@ class ListAllJobVacancy(ListView):
     model = JobVacancy
     context_object_name = "all_job_vacancy"
 
+    def get_context_data(self, **kwargs):
+        ctx = super(ListAllJobVacancy, self).get_context_data(**kwargs)
+        ctx['comments'] = Comment.objects.all()
+        return ctx
+
 class ListAllJobVacancyUser(ListView):
     template_name = 'website/user_home.html'
     form_class =JobApplicationRegisterForm
@@ -105,3 +122,9 @@ class ListAllJobVacancyUser(ListView):
 
 
         return redirect('user_home')
+
+class CommentSignUp(CreateView):
+    model = Comment
+    form_class = CommentSignUpForm
+    template_name = 'website/create_comment.html'
+    context_object_name = "comment"
