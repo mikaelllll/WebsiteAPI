@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.db import transaction
 from django.forms.utils import ValidationError
-from api.models import User, JobVacancy
+from api.models import User, JobVacancy, JobApplication
 from django.forms import ModelForm
 from django.utils import timezone
 
@@ -82,4 +82,12 @@ class JobVacancySignUpForm(ModelForm):
             'company',
             'description',
             'salary'
+        ]
+
+class JobApplicationRegisterForm(ModelForm):
+    class Meta:
+        model = JobApplication
+        fields = [
+            'jobVacancyID',
+            'userID'
         ]

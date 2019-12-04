@@ -9,8 +9,8 @@ from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 
 from .decorators import user_required
-from .forms import SignUpForm, AdminUserSignUpForm, JobVacancySignUpForm
-from api.models import User, JobVacancy
+from .forms import SignUpForm, AdminUserSignUpForm, JobVacancySignUpForm, JobApplicationRegisterForm
+from api.models import User, JobVacancy, JobApplication
 
 def home(request):
     if request.user.is_authenticated:
@@ -76,6 +76,26 @@ class ListAllJobVacancy(ListView):
 
 class ListAllJobVacancyUser(ListView):
     template_name = 'website/user_home.html'
+    form_class =JobApplicationRegisterForm
     model = JobVacancy
     context_object_name = "all_job_vacancy"
 
+
+    def post(self, request):
+        if request.method == 'POST':
+            instance  = JobApplication(
+                jobVacancyID = JobVacancy.objects.filter(id=request.POST.get('id')).first(),
+                userID=User.objects.filter(id=request.user.id).first(),
+                isDeleted = False
+            )
+
+            print (instance.userID)
+
+
+            print (request.user.id)
+            print (request.POST.get('id'))
+
+            instance.save()
+
+
+        return redirect('user_home')
