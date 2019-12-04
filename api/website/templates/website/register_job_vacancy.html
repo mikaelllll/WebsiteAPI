@@ -1,17 +1,16 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-md-8 col-sm-10 col-12">
-      <h2>Sign up</h2>
-      <form method="post" novalidate>
-        {% csrf_token %}
-        <input type="hidden" name="next" value="{{ next }}">
-        {{ form|crispy }}
-        <button type="submit" class="btn btn-success">Sign up</button>
-      </form>
-    </div>
+<link rel="stylesheet" type="text/css" href="{% static 'signup.css' %}">
+  <div class="signupstyle">
+    <h2>Sign up</h2>
+    <form method="post" novalidate>
+      {% csrf_token %}
+      <input type="hidden" name="next" value="{{ next }}">
+      {{ form|crispy }}
+      <button type="submit" class="signupstyle">Sign up</button>
+    </form>
   </div>
 {% endblock %}
