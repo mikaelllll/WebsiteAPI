@@ -106,3 +106,40 @@ class JobVacancy(models.Model):
     )
 
     objects = models.Manager()
+
+class JobApplication(models.Model):
+
+    jobVacancyID = models.ForeignKey(
+        JobVacancy,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    userID = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    createDate = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=True,
+        null=False,
+        blank=False
+    )
+
+    deleteDate = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+
+    isDeleted = models.BooleanField(
+        null=False,
+        blank=False
+    )
+
+    objects =  models.Manager()

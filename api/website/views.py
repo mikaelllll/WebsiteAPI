@@ -18,6 +18,8 @@ def home(request):
             return redirect('admin_home')
         elif request.user.is_user_administrator:
             return redirect('user_admin_home')
+        elif request.user.is_user_normal:
+            return redirect('user_home')
     return render(request, 'website/home.html')
 
 class UserSignUpView(CreateView):
@@ -32,7 +34,7 @@ class UserSignUpView(CreateView):
     def form_valid(self, form):
         user = form.save()
         login(self.request, user)
-        return redirect('home')
+        return redirect('user_home')
 
 class AdminUserSignUpView(CreateView):
     model = User
@@ -45,7 +47,7 @@ class AdminUserSignUpView(CreateView):
 
     def form_valid(self, form):
         user = form.save()
-        return redirect('home')
+        return redirect('admin_home')
 
 class ListAllAdminUser(ListView):
     template_name = 'website/admin_home.html'
@@ -64,11 +66,16 @@ class JobVacancySignUpView(CreateView):
             instance = form.save(commit=False)
             instance.userADMID_id = request.user.id
             instance.save()
-        return render(request, 'website/user_admin_home.html', {'form':form})
+        return redirect('user_admin_home')
 
 
 class ListAllJobVacancy(ListView):
     template_name = 'website/user_admin_home.html'
+    model = JobVacancy
+    context_object_name = "all_job_vacancy"
+
+class ListAllJobVacancyUser(ListView):
+    template_name = 'website/user_home.html'
     model = JobVacancy
     context_object_name = "all_job_vacancy"
 

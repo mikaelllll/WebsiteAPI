@@ -16,6 +16,8 @@ Including another URLconf
 from django.urls.conf import include
 from django.urls import path
 from django.contrib import admin
+from django.conf.urls.static import static
+from django.conf import settings
 
 from website import views
 
@@ -28,6 +30,7 @@ urlpatterns = [
     path('accounts/useradmin_signup_form/', views.AdminUserSignUpView.as_view(), name='useradmin_signup_form'),
     path('admin_home/', views.ListAllAdminUser.as_view(), name='admin_home'),
     path('user_admin_home/',views.ListAllJobVacancy.as_view(), name='user_admin_home'),
+    path('user_home/', views.ListAllJobVacancyUser.as_view(), name='user_home'),
     path('registration/jobvacancy', views.JobVacancySignUpView.as_view(), name='register_job_vacancy'),
 
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

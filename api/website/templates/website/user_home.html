@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block content %}
+
+{% if user.is_authenticated and user.is_user_normal %}
+
+<table>
+<tbody>
+{% for job_vacancy in all_job_vacancy %}
+<tr>
+    <td>Company: {{ job_vacancy.company }}, </td>
+    <td>Description: {{ job_vacancy.description }}, </td>
+    <td>Salary: {{ job_vacancy.salary }}</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+
+{% endif %}
+
+{% endblock %}
