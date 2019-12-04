@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, TemplateView
+from django import template
+
+register = template.Library()
 
 from .decorators import user_required
 from .forms import SignUpForm, AdminUserSignUpForm, JobVacancySignUpForm, JobApplicationRegisterForm, UserChangeForm
@@ -92,13 +95,13 @@ class ListAllJobVacancyUser(ListView):
                 isDeleted = False
             )
 
-            print (instance.userID)
+            search = JobApplication.objects.filter(
+                jobVacancyID = request.POST.get('id')).filter(
+                    userID = User.objects.filter(id=request.user.id).first()
+            ).first()
 
-
-            print (request.user.id)
-            print (request.POST.get('id'))
-
-            instance.save()
+            if search is None:
+                instance.save()
 
 
         return redirect('user_home')

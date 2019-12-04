@@ -7,17 +7,18 @@
 <table class="blueTable">
 <thead>
 <tr>
-<th>Username</th>
-<th>Last Login</th>
+<th>Company</th>
+<th>Description</th>
+<th>Salary</th>
 </tr>
 </thead>
 <tbody>
 {% for job_vacancy in all_job_vacancy %}
 <tr>
     {% if not job_vacancy.isDeleted and job_vacancy.userADMID_id == user.id %}
-        <td>Company: {{ job_vacancy.company }}, </td>
-        <td>Description: {{ job_vacancy.description }}, </td>
-        <td>Salary: {{ job_vacancy.salary }}</td>
+        <td>{{ job_vacancy.company }} </td>
+        <td>{{ job_vacancy.description }} </td>
+        <td>{{ job_vacancy.salary }}</td>
     {% endif %}
 </tr>
 {% endfor %}
