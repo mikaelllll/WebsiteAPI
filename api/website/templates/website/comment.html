@@ -15,23 +15,26 @@
 </tr>
 </thead>
 <tbody>
+
 {%for usr in all_users %}
-    <tr>
+<tr>
     {%for applied_user in application_list %}
         {% if usr.id == applied_user.userID_id %}
             <td>{{usr.first_name}} {{usr.last_name}}</td>
             {%for comment in all_comment %}
-                {{user.id}}
                 {% if comment.jobApplicationID_id == applied_user.id and comment.userADMID_id == user.id %}
                     <td>{{comment.comment}}</td>
                 {% else %}
                     <td></td>
                 {% endif %}
             {% endfor %}
+        <td><a href="{% url 'create_comment' applied_user.id user.id %}"><button>Add Comment</button></a></td>
         {% endif %}
     {% endfor %}
-    </tr>
+</tr>
+
 {% endfor %}
+
 
 </tbody>
 </table>

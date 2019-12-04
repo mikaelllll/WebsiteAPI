@@ -12,7 +12,7 @@
     <form method="post" novalidate>
       {% csrf_token %}
       <input type="hidden" name="next" value="{{ next }}">
-      {{ form|crispy }}
+      {{ form }}
       <button type="submit" class="signupstyle">Sign up</button>
     </form>
 </div>

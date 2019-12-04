@@ -169,8 +169,8 @@ class Comment(models.Model):
     createDate = models.DateTimeField(
         auto_now=False,
         auto_now_add=True,
-        null=False,
-        blank=False
+        null=True,
+        blank=True
     )
 
     deleteDate = models.DateTimeField(
@@ -181,6 +181,7 @@ class Comment(models.Model):
     )
 
     isDeleted = models.BooleanField(
+        default=False,
         null=False,
         blank=False
     )

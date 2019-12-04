@@ -124,7 +124,30 @@ class ListAllJobVacancyUser(ListView):
         return redirect('user_home')
 
 class CommentSignUp(CreateView):
-    model = Comment
+
     form_class = CommentSignUpForm
     template_name = 'website/create_comment.html'
-    context_object_name = "comment"
+    model = Comment
+    context_object_name = "create_comment"
+
+    def post(self, request, companyid, userid) :
+        form = CommentSignUpForm(request.POST)
+        print (form)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            print(form.errors.as_data())
+
+            inst = Comment(
+                userADMID=User.objects.filter(id=userid).first(),
+                jobApplicationID=JobApplication.objects.filter(id=companyid).first(),
+                comment="woooooooowow",
+                isDeleted = False
+            )
+
+            useridfilter = User.objects.filter(id=userid).first()
+            jobappid = JobApplication.objects.filter(id=companyid).first()
+            search = Comment.objects.filter(userADMID=useridfilter.id).filter(jobApplicationID=jobappid.id).first()
+
+            print(instance)
+
+        return redirect('user_admin_home')
