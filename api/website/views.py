@@ -22,6 +22,9 @@ def home(request):
             return redirect('user_home')
     return render(request, 'website/home.html')
 
+def profile(request):
+    return render(request, 'website/profile.html')
+
 class UserSignUpView(CreateView):
     model = User
     form_class = SignUpForm
