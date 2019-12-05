@@ -2,22 +2,21 @@
 {% load static %}
 <!doctype html>
 {% load crispy_forms_tags %}
+
+
+
+
 {% block content %}
-
-{% if user.is_authenticated and user.is_user_administrator %}
-<link rel="stylesheet" type="text/css" href="{% static 'signup.css' %}">
-
-
-<div class="signupstyle">
-    <h2>Sign up</h2>
-    <form method="post" novalidate>
-      {% csrf_token %}
-      <input type="hidden" name="next" value="{{ next }}">
-      {{ form }}
-      <button type="submit" class="signupstyle">Sign up</button>
-    </form>
-</div>
-
-{% endif %}
-
+    {% if user.is_authenticated and user.is_user_administrator %}
+        <link rel="stylesheet" type="text/css" href="{% static 'signup.css' %}">
+        <div class="signupstyle">
+            <h2>Sign up</h2>
+            <form method="post" novalidate>
+              {% csrf_token %}
+              <input type="hidden" name="next" value="{{ next }}">
+              {{ form }}
+              <button type="submit" class="signupstyle">Sign up</button>
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}
