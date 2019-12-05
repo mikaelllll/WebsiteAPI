@@ -18,8 +18,9 @@ from django.urls import path
 from django.contrib import admin
 from django.conf.urls.static import static
 from django.conf import settings
-
 from website import views
+
+#Assigning all url paths of the application plus using the command to access static folder containing the .css for the html layouts
 
 urlpatterns = [
     path('admin/', admin.site.urls),

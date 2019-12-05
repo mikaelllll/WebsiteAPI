@@ -6,6 +6,7 @@ from api.models import User, JobVacancy, JobApplication, Comment
 from django.forms import ModelForm
 from django.utils import timezone
 
+#SignUpForm is the form that helps in creating the normal user that will use the system to apply for jobs
 class SignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
@@ -18,6 +19,7 @@ class SignUpForm(UserCreationForm):
             'cpf'
         ]
 
+    #The save is atomic to prevent updates to the database occurring only partially
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
@@ -25,6 +27,8 @@ class SignUpForm(UserCreationForm):
         user.save()
         return user
 
+    #These methods are to make sure that in the page the user attributes label that are requires shows with a * in their names and it
+    #also ensures that they are not left blank
     def clean_first_name(self):
         if self.cleaned_data["first_name"].strip() == '':
             raise ValidationError("This field is required.")
@@ -58,6 +62,8 @@ class SignUpForm(UserCreationForm):
         self.fields['telephone'].label = "Telephone"
         self.fields['cpf'].label = "CPF"
 
+
+#AdminUserSignUpForm is the form that helps in creating user administrators that will register jobs in the system for users to apply to them
 class AdminUserSignUpForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = User
@@ -67,7 +73,7 @@ class AdminUserSignUpForm(UserCreationForm):
             'email'
         ]
 
-
+    # The save is atomic to prevent updates to the database occurring only partially
     @transaction.atomic
     def save(self):
         user = super().save(commit=False)
@@ -75,7 +81,7 @@ class AdminUserSignUpForm(UserCreationForm):
         user.save()
         return user
 
-
+#JobVacancySignUpForm is the form that helps the users administrators to create new jobs for the application to list
 class JobVacancySignUpForm(ModelForm):
     class Meta:
         model = JobVacancy
@@ -85,6 +91,8 @@ class JobVacancySignUpForm(ModelForm):
             'salary'
         ]
 
+
+#JobApplicationRegisterForm is the form that helps to create a relation between user and job to know that the user has applied to a specific job
 class JobApplicationRegisterForm(ModelForm):
     class Meta:
         model = JobApplication
@@ -93,14 +101,7 @@ class JobApplicationRegisterForm(ModelForm):
             'userID'
         ]
 
-class JobApplicationUserRegisteredForm(ModelForm):
-    class Meta:
-        model = Comment
-        fields = [
-            'userADMID',
-            'jobApplicationID'
-        ]
-
+#CommentSignUpForm is the form that helps to create comment to a job application
 class CommentSignUpForm(ModelForm):
     class Meta:
         model = Comment

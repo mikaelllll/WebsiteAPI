@@ -4,6 +4,7 @@
 {% load crispy_forms_tags %}
 {% block content %}
 
+{% if user.is_authenticated and user.is_user_administrator %}
 <link rel="stylesheet" type="text/css" href="{% static 'signup.css' %}">
 
 
@@ -16,5 +17,7 @@
       <button type="submit" class="signupstyle">Sign up</button>
     </form>
 </div>
+
+{% endif %}
 
 {% endblock %}
