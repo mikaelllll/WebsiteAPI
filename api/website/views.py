@@ -105,14 +105,14 @@ class ListAllJobVacancy(ListView):
         ctx['comments'] = Comment.objects.all()
         return ctx
 
-#Class that helps creating the view to list all job vacanciy on the user home page and allowing the user to apply for the jobs
+#Class that helps creating the view to list all job vacancy on the user home page and allowing the user to apply for the jobs
 class ListAllJobVacancyUser(ListView):
     template_name = 'website/user_home.html'
     form_class =JobApplicationRegisterForm
     model = JobVacancy
     context_object_name = "all_job_vacancy"
 
-    #Passing aditional information of all applications to handle wether the user already has a application to a certain job or nob
+    #Passing aditional information of all applications to handle whether the user already has a application to a certain job or nob
     def get_context_data(self, **kwargs):
         context = super(ListAllJobVacancyUser, self).get_context_data(**kwargs)
         context['applications'] = JobApplication.objects.filter()
