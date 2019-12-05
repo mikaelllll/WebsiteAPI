@@ -1,37 +1,49 @@
 {% extends 'base.html' %}
 {% load static %}
 <!doctype html>
+
+
+
 {% block content %}
-<link rel="stylesheet" type="text/css" href="{% static 'admin_home.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'admin_home.css' %}">
+    {% if user.is_authenticated and user.is_user_normal %}
+    <table class="blueTable">
+        <thead>
+            <tr>
+                <th>Company</th>
+                <th>Description</th>
+                <th>Salary</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for job_vacancy in all_job_vacancy %}
+                <tr>
+                    <td>{{ job_vacancy.company }} </td>
+                    <td>{{ job_vacancy.description }} </td>
+                    <td>{{ job_vacancy.salary }}</td>
 
-{% if user.is_authenticated and user.is_user_normal %}
-
-<table class="blueTable">
-<thead>
-<tr>
-<th>Company</th>
-<th>Description</th>
-<th>Salary</th>
-</tr>
-</thead>
-<tbody>
-{% for job_vacancy in all_job_vacancy %}
-<tr>
-    <td>{{ job_vacancy.company }} </td>
-    <td>{{ job_vacancy.description }} </td>
-    <td>{{ job_vacancy.salary }}</td>
-    <td><form method="post" novalidate>
-        {% csrf_token %}
-        <input type='hidden' value='{{job_vacancy.id}}' name='id'>
-        {{ form }}
-        <input type="submit" name="appliedJob" value="Apply for job" id = {{job_vacancy.id}}/>
-    </form></td>
-</tr>
-{% endfor %}
-
-</tbody>
-</table>
-
-{% endif %}
-
+                    <td><form method="post" id="vanish{{job_vacancy.id}}" novalidate>
+                        {% csrf_token %}
+                        <input type='hidden' value='{{job_vacancy.id}}' name='id'>
+                        {{ form }}
+                        <input type="submit" name="appliedJob" value="Apply for job" id = add/>
+                    </form>
+                    {% for application in applications %}
+                        {% if application.userID_id == user.id and application.jobVacancyID_id == job_vacancy.id and not application.isDeleted %}
+                            <form method="post" novalidate>
+                                {% csrf_token %}
+                                <input type='hidden' value='{{job_vacancy.id}}' name='id'>
+                                {{ form }}
+                                <input type="submit" name="removesAppliedJob" value="Remove Application" id = remove/>
+                            </form></td>
+                            <script>
+                                document.getElementById("vanish{{job_vacancy.id}}").style.display = "none";
+                            </script>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
 {% endblock %}
