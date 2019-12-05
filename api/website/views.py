@@ -44,7 +44,7 @@ def create_comment(request, companyid, userid):
 class UserSignUpView(CreateView):
     model = User
     form_class = SignUpForm
-    template_name = 'registration/signup_form.html'
+    template_name = 'website/signup_form.html'
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'user'
@@ -58,7 +58,7 @@ class UserSignUpView(CreateView):
 class AdminUserSignUpView(CreateView):
     model = User
     form_class = AdminUserSignUpForm
-    template_name = 'registration/useradmin_signup_form.html'
+    template_name = 'website/useradmin_signup_form.html'
 
     def get_context_data(self, **kwargs):
         kwargs['user_type'] = 'user'

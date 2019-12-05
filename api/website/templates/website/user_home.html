@@ -21,7 +21,7 @@
     <td>{{ job_vacancy.description }} </td>
     <td>{{ job_vacancy.salary }}</td>
 
-    <td><form method="post" novalidate>
+    <td><form method="post" id="vanish{{job_vacancy.id}}" novalidate>
         {% csrf_token %}
         <input type='hidden' value='{{job_vacancy.id}}' name='id'>
         {{ form }}
@@ -35,9 +35,14 @@
                 <input type='hidden' value='{{job_vacancy.id}}' name='id'>
                 {{ form }}
                 <input type="submit" name="removesAppliedJob" value="Remove Application" id = remove/>
-            </form></td
+            </form></td>
+            <script>
+                document.getElementById("vanish{{job_vacancy.id}}").style.display = "none";
+            </script>
         {% endif %}
     {% endfor %}
+
+
 
 </tr>
 {% endfor %}
