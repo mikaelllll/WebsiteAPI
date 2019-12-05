@@ -9,6 +9,7 @@
 <body>
 
 {% if user.is_authenticated and user.is_admin_user or user.is_superuser%}
+<h2> PROFILE </h2>
 <table class="blueTable">
 <thead>
 <tr>
@@ -24,6 +25,7 @@
 </tbody>
 </table>
 {% elif user.is_authenticated and user.is_user_administrator %}
+<h2> PROFILE </h2>
 <table class="blueTable">
 <thead>
 <tr>
@@ -41,6 +43,7 @@
 </tbody>
 </table>
 {% elif user.is_authenticated and user.is_user_normal %}
+<h2> PROFILE </h2>
 <table class="blueTable">
 <thead>
 <tr>
@@ -68,6 +71,44 @@
 
 {% else %}
     <p>Please log in to view profile</p>
+{% endif %}
+
+
+{% if user.is_authenticated and user.is_user_normal %}
+<h2> JOB APPLICATIONS </h2>
+<table class="blueTable">
+<thead>
+<tr>
+<th>Company</th>
+<th>Description</th>
+<th>Salary</th>
+<th>Applied Date</th>
+<th>Deletion</th>
+</tr>
+</thead>
+<tbody>
+
+{% for app in application_list %}
+    <tr>
+        {% for job in job_list %}
+            {% if app.jobVacancyID_id == job.id %}
+                <td>{{job.company}}</td>
+                <td>{{job.description}}</td>
+                <td>{{job.salary}}</td>
+                <td>{{app.createDate}}</td>
+                {% if app.isDeleted %}
+                    <td>Deleted</td>
+                {% else %}
+                    <td>Available</td>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+   </tr>
+{% endfor %}
+
+</tbody>
+</table>
+
 {% endif %}
 
 </body>

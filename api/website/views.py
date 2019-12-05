@@ -27,7 +27,10 @@ def home(request):
     return render(request, 'website/home.html')
 
 def profile(request):
-    return render(request, 'website/profile.html')
+    job_applications = JobApplication.objects.filter(userID_id=request.user.id).all()
+    job_vacancies = JobVacancy.objects.all()
+    context = {'application_list':job_applications, 'job_list':job_vacancies}
+    return render(request, 'website/profile.html', context)
 
 def comment(request, id):
     selected_company = JobVacancy.objects.filter(id = id).first()
