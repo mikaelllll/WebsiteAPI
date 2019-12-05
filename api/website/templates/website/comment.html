@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load static %}
+<!doctype html>
+{% block content %}
+<link rel="stylesheet" type="text/css" href="{% static 'admin_home.css' %}">
+
+{% if user.is_authenticated and user.is_user_administrator %}
+
+
+<table class="blueTable">
+<thead>
+<tr>
+<th>User</th>
+<th>Comment</th>
+</tr>
+</thead>
+<tbody>
+{%for usr in all_users %}
+    {%for applied_user in application_list %}
+        {% if usr.id == applied_user.userID_id %}
+    <tr>
+            <td>{{usr.first_name}} {{usr.last_name}}</td>
+            {%for comment in all_comment %}
+                {% if comment.jobApplicationID_id == applied_user.id and comment.userADMID_id == user.id %}
+                    <td>{{comment.comment}}｜{{comment.createDate}}</td>
+                {% endif %}
+            {% endfor %}
+        <td><a href="{% url 'create_comment' applied_user.id user.id %}"><button>Add Comment</button></a></td>
+ </tr>
+        {% endif %}
+    {% endfor %}
+
+{% endfor %}
+
+
+</tbody>
+</table>
+
+{% endif %}
+{% endblock %}

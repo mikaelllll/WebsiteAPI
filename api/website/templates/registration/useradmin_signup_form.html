@@ -1,17 +1,19 @@
 {% extends 'base.html' %}
-
+{% load static %}
+<!DOCTYPE html>
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <div class="row">
-    <div class="col-md-8 col-sm-10 col-12">
-      <h2>Sign up</h2>
+{% if user.is_authenticated and user.is_admin_user or user.is_superuser %}
+<link rel="stylesheet" type="text/css" href="{% static 'signup.css' %}">
+  <div class="signupstyle">
+      <h2 class='loginstyle'>Sign up</h2>
       <form method="post" novalidate>
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
         {{ form|crispy }}
-        <button type="submit" class="btn btn-success">Sign up</button>
+        <button type="submit" class="signupstyle">Register</button>
       </form>
-    </div>
   </div>
+{% endif %}
 {% endblock %}

@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from website.cpfvalidator import validate_CPF
 
 def user_file_directory_path(instance, filename):
     return 'website/files/user_{0}/{1}'.format(instance.user.id, filename)
@@ -40,9 +41,10 @@ class User(AbstractUser):
     )
 
     cpf = models.CharField(
-        max_length=255,
+        max_length=14,
         null=False,
-        blank=False
+        blank=False,
+        validators=[validate_CPF]
     )
 
     curriculum = models.FileField(
@@ -143,3 +145,47 @@ class JobApplication(models.Model):
     )
 
     objects =  models.Manager()
+
+class Comment(models.Model):
+
+    userADMID = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    jobApplicationID = models.ForeignKey(
+        JobApplication,
+        on_delete=models.CASCADE,
+        null=False,
+        blank=False
+    )
+
+    comment = models.CharField(
+        max_length=3000,
+        null=False,
+        blank=False
+    )
+
+    createDate = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=True,
+        null=True,
+        blank=True
+    )
+
+    deleteDate = models.DateTimeField(
+        auto_now=False,
+        auto_now_add=False,
+        null=True,
+        blank=True
+    )
+
+    isDeleted = models.BooleanField(
+        default=False,
+        null=False,
+        blank=False
+    )
+
+    objects = models.Manager()

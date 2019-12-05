@@ -7,14 +7,17 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, TemplateView
+from django import template
+
+register = template.Library()
 
 from .decorators import user_required
-from .forms import SignUpForm, AdminUserSignUpForm, JobVacancySignUpForm, JobApplicationRegisterForm
-from api.models import User, JobVacancy, JobApplication
+from .forms import SignUpForm, AdminUserSignUpForm, JobVacancySignUpForm, JobApplicationRegisterForm, UserChangeForm, CommentSignUpForm
+from api.models import User, JobVacancy, JobApplication, Comment
 
 def home(request):
     if request.user.is_authenticated:
-        if request.user.is_admin_user:
+        if request.user.is_admin_user or request.user.is_superuser:
             return redirect('admin_home')
         elif request.user.is_user_administrator:
             return redirect('user_admin_home')
@@ -24,6 +27,18 @@ def home(request):
 
 def profile(request):
     return render(request, 'website/profile.html')
+
+def comment(request, id):
+    selected_company = JobVacancy.objects.filter(id = id).first()
+    user_list = JobApplication.objects.filter(jobVacancyID_id = selected_company).all()
+    all_user = User.objects.all()
+    all_coments = Comment.objects.all()
+    context = {'application_list':user_list, 'all_users':all_user, 'all_comment':all_coments}
+    return render(request, 'website/comment.html', context)
+
+def create_comment(request, companyid, userid):
+    context = {'id': companyid, 'user':userid}
+    return render(request, 'website/create_comment.html', context)
 
 class UserSignUpView(CreateView):
     model = User
@@ -77,6 +92,11 @@ class ListAllJobVacancy(ListView):
     model = JobVacancy
     context_object_name = "all_job_vacancy"
 
+    def get_context_data(self, **kwargs):
+        ctx = super(ListAllJobVacancy, self).get_context_data(**kwargs)
+        ctx['comments'] = Comment.objects.all()
+        return ctx
+
 class ListAllJobVacancyUser(ListView):
     template_name = 'website/user_home.html'
     form_class =JobApplicationRegisterForm
@@ -92,13 +112,28 @@ class ListAllJobVacancyUser(ListView):
                 isDeleted = False
             )
 
-            print (instance.userID)
+            search = JobApplication.objects.filter(
+                jobVacancyID = request.POST.get('id')).filter(
+                    userID = User.objects.filter(id=request.user.id).first()
+            ).first()
 
-
-            print (request.user.id)
-            print (request.POST.get('id'))
-
-            instance.save()
+            if search is None:
+                instance.save()
 
 
         return redirect('user_home')
+
+class CommentSignUp(CreateView):
+    template_name = 'website/create_comment.html'
+    model = Comment
+    form_class = CommentSignUpForm
+    success_url = reverse_lazy("user_admin_home")
+
+    def post(self, request, companyid, userid):
+        form = CommentSignUpForm(request.POST)
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.jobApplicationID = JobApplication.objects.filter(id=companyid).first()
+            instance.userADMID = User.objects.filter(id=userid).first()
+            instance.save()
+        return redirect('user_admin_home')

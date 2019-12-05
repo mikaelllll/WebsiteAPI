@@ -33,5 +33,8 @@ urlpatterns = [
     path('user_admin_home/',views.ListAllJobVacancy.as_view(), name='user_admin_home'),
     path('user_home/', views.ListAllJobVacancyUser.as_view(), name='user_home'),
     path('registration/jobvacancy', views.JobVacancySignUpView.as_view(), name='register_job_vacancy'),
+    path('comment/<id>/', views.comment, name='comment'),
+    path('comment/<companyid>/<userid>/', views.CommentSignUp.as_view(), name='create_comment')
+
 
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
