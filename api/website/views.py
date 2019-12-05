@@ -17,7 +17,7 @@ from api.models import User, JobVacancy, JobApplication, Comment
 
 def home(request):
     if request.user.is_authenticated:
-        if request.user.is_admin_user:
+        if request.user.is_admin_user or request.user.is_superuser:
             return redirect('admin_home')
         elif request.user.is_user_administrator:
             return redirect('user_admin_home')

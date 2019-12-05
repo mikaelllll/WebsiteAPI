@@ -4,13 +4,14 @@
 {% block content %}
 <link rel="stylesheet" type="text/css" href="{% static 'admin_home.css' %}">
 
-{% if user.is_authenticated and user.is_admin_user %}
+{% if user.is_authenticated and user.is_admin_user or user.is_superuser %}
 
 <table class="blueTable">
 <thead>
 <tr>
 <th>Username</th>
 <th>Last Login</th>
+<th>Email</th>
 </tr>
 </thead>
 <tbody>
@@ -19,6 +20,7 @@
     {% if admin_user.is_user_administrator and admin_user.is_active %}
         <td>{{ admin_user.username }}</td>
         <td>{{ admin_user.last_login }}</td>
+        <td>{{ admin_user.email }}</td>
     {% endif %}
 </tr>
 {% endfor %}

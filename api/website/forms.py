@@ -63,7 +63,8 @@ class AdminUserSignUpForm(UserCreationForm):
         model = User
         fields = [
             'first_name',
-            'username'
+            'username',
+            'email'
         ]
 
 

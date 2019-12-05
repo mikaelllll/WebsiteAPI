@@ -2,6 +2,7 @@ from django.contrib.auth.models import AbstractUser
 from django.contrib.auth import get_user_model
 from django.db import models
 from django.core.validators import FileExtensionValidator
+from website.cpfvalidator import validate_CPF
 
 def user_file_directory_path(instance, filename):
     return 'website/files/user_{0}/{1}'.format(instance.user.id, filename)
@@ -40,9 +41,10 @@ class User(AbstractUser):
     )
 
     cpf = models.CharField(
-        max_length=255,
+        max_length=14,
         null=False,
-        blank=False
+        blank=False,
+        validators=[validate_CPF]
     )
 
     curriculum = models.FileField(
