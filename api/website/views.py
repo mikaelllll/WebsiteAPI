@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views.generic import CreateView, ListView, UpdateView, TemplateView
 from django import template
+from django.utils import timezone
 
 register = template.Library()
 
@@ -103,22 +104,37 @@ class ListAllJobVacancyUser(ListView):
     model = JobVacancy
     context_object_name = "all_job_vacancy"
 
+    def get_context_data(self, **kwargs):
+        context = super(ListAllJobVacancyUser, self).get_context_data(**kwargs)
+        context['applications'] = JobApplication.objects.filter()
+        return context
+
 
     def post(self, request):
         if request.method == 'POST':
-            instance  = JobApplication(
-                jobVacancyID = JobVacancy.objects.filter(id=request.POST.get('id')).first(),
-                userID=User.objects.filter(id=request.user.id).first(),
-                isDeleted = False
-            )
+            if 'appliedJob' in request.POST:
+                instance  = JobApplication(
+                    jobVacancyID = JobVacancy.objects.filter(id=request.POST.get('id')).first(),
+                    userID=User.objects.filter(id=request.user.id).first(),
+                    isDeleted = False
+                )
 
-            search = JobApplication.objects.filter(
-                jobVacancyID = request.POST.get('id')).filter(
-                    userID = User.objects.filter(id=request.user.id).first()
-            ).first()
+                search = JobApplication.objects.filter(
+                    jobVacancyID = request.POST.get('id')).filter(
+                        userID = User.objects.filter(id=request.user.id).first()
+                ).filter(isDeleted = 0).first()
 
-            if search is None:
-                instance.save()
+                if search is None:
+                    instance.save()
+            if 'removesAppliedJob' in request.POST:
+                search = JobApplication.objects.filter(
+                    jobVacancyID=request.POST.get('id')).filter(
+                    userID=User.objects.filter(id=request.user.id).first()
+                ).filter(isDeleted=0).first()
+                if search is not None:
+                    search.isDeleted = True
+                    search.deleteDate = timezone.localtime(timezone.now())
+                    search.save()
 
 
         return redirect('user_home')

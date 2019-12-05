@@ -20,12 +20,25 @@
     <td>{{ job_vacancy.company }} </td>
     <td>{{ job_vacancy.description }} </td>
     <td>{{ job_vacancy.salary }}</td>
+
     <td><form method="post" novalidate>
         {% csrf_token %}
         <input type='hidden' value='{{job_vacancy.id}}' name='id'>
         {{ form }}
-        <input type="submit" name="appliedJob" value="Apply for job" id = {{job_vacancy.id}}/>
-    </form></td>
+        <input type="submit" name="appliedJob" value="Apply for job" id = add/>
+    </form>
+
+    {% for application in applications %}
+        {% if application.userID_id == user.id and application.jobVacancyID_id == job_vacancy.id and not application.isDeleted %}
+            <form method="post" novalidate>
+                {% csrf_token %}
+                <input type='hidden' value='{{job_vacancy.id}}' name='id'>
+                {{ form }}
+                <input type="submit" name="removesAppliedJob" value="Remove Application" id = remove/>
+            </form></td
+        {% endif %}
+    {% endfor %}
+
 </tr>
 {% endfor %}
 

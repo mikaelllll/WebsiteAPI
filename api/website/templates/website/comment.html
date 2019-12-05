@@ -17,16 +17,16 @@
 <tbody>
 {%for usr in all_users %}
     {%for applied_user in application_list %}
-        {% if usr.id == applied_user.userID_id %}
+        {% if usr.id == applied_user.userID_id and not applied_user.isDeleted%}
     <tr>
-            <td>{{usr.first_name}} {{usr.last_name}}</td>
+        <td>{{usr.first_name}} {{usr.last_name}}</td>
             {%for comment in all_comment %}
                 {% if comment.jobApplicationID_id == applied_user.id and comment.userADMID_id == user.id %}
                     <td>{{comment.comment}}｜{{comment.createDate}}</td>
                 {% endif %}
             {% endfor %}
         <td><a href="{% url 'create_comment' applied_user.id user.id %}"><button>Add Comment</button></a></td>
- </tr>
+    </tr>
         {% endif %}
     {% endfor %}
 
